@@ -79,4 +79,32 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typingTextElement) {
         setTimeout(type, 1000);
     }
+
+    // Manual Scrollspy using IntersectionObserver
+    const navLinks = document.querySelectorAll('.nav-link');
+    const scrollSections = document.querySelectorAll('section[id]');
+
+    const scrollObserverOptions = {
+        root: null,
+        rootMargin: '-40% 0px -40% 0px', // Trigger when section is in the middle of the viewport
+        threshold: 0
+    };
+
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, scrollObserverOptions);
+
+    scrollSections.forEach(section => {
+        scrollObserver.observe(section);
+    });
 });
